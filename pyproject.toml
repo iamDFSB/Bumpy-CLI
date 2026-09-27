@@ -8,7 +8,7 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "click (>=8.5.0,<9.0.0)"
+    "typer (>=0.27.2,<0.28.0)"
 ]
 
 
@@ -17,10 +17,10 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-packages = [{ include = "bumpy.py" }]
+packages = [{ include = "bumpy", from = "src" }]
 
 [tool.poetry.scripts]
-bumpy = "bumpy:cli" # entrypoint to the cli
+bumpy = "bumpy.main:app" # entrypoint to the cli
 
 [dependency-groups]
 dev = [
