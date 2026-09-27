@@ -1,0 +1,12 @@
+site_name: Bumpy CLI
+repo_url: https://github.com/iamDFSB/Bumpy-CLI
+repo_name: iamDFSB/Bumpy-CLI
+edit_uri: tree/main/docs
+
+theme:
+  name: material
+  language: pt-BR
+  logo: assets/images/logo.png
+
+extra_css:
+  - assets/styles/index.css
