@@ -1,6 +1,6 @@
-from enum import Enum
 import typer
 from rich.console import Console
+from bumpy.models import VersionPart
 from bumpy.file_client import FileClient
 
 
@@ -10,11 +10,6 @@ job_app = typer.Typer(
 )
 console = Console()
 
-class VersionPart(str, Enum):
-    major = "major"
-    minor = "minor"
-    patch = "patch"
-
 @job_app.command('up')
 def job_up(
     name: str = typer.Argument(..., help='Nome da pasta do job.'),
@@ -22,7 +17,7 @@ def job_up(
         VersionPart.patch, help='Parte da versão a atualizar (major, minor, patch)'
     ),
     uat: bool = typer.Option(
-        False, '--uat', help='Aplica apenas no ambiente de UAT.'
+        False, '--uat', help='Aplica no ambiente de UAT.'
     ),
 ):
     """⬆️ Aumenta a versão de um job específico."""
@@ -31,9 +26,8 @@ def job_up(
     )
     ambient = "uat" if uat else "prd-marketplace"
     path_str = f'{ambient}/{name}/version'
-    file_client = FileClient(path_str)
-    print("Nome: ", part.value)
-    file_client.increase(segment=part.value)
+    FileClient() \
+        .increase(segment=part.value, pipeline_path=path_str)
 
 
 @job_app.command('down')
@@ -43,7 +37,7 @@ def job_down(
         VersionPart.patch, help='Parte da versão a atualizar (major, minor, patch)'
     ),
     uat: bool = typer.Option(
-        False, "--uat", help='Aplica apenas no ambiente de UAT.'
+        False, "--uat", help='Aplica no ambiente de UAT.'
     ),
 ):
     """⬇️ Diminui a versão de um job específico."""
@@ -52,5 +46,5 @@ def job_down(
     )
     ambient = "uat" if uat else "prd-marketplace"
     path_str = f'{ambient}/{name}/version'
-    file_client = FileClient(path_str)
-    file_client.decrease(segment=part.value)
+    FileClient() \
+        .decrease(segment=part.value, pipeline_path=path_str)
