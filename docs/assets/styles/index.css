@@ -2,3 +2,14 @@
     width: 70px;
     height: 70px;
 }
+
+.portal-logo {
+    display: block;
+    width: 110px;
+    height: auto;
+    filter: drop-shadow(0 8px 18px rgba(111, 61, 184, 0.18));
+}
+
+.md-typeset h1 {
+    margin-top: 0;
+}

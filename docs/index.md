@@ -1,3 +1,5 @@
+![Bumpy CLI](assets/images/logo.png)
+
 # Bumpy CLI
 
 O Bumpy CLI é uma ferramenta para controlar a versão de jobs em ambientes de pipeline, permitindo aumentar ou reduzir os valores de `major`, `minor` e `patch` em arquivos de versão salvos em pastas específicas.
