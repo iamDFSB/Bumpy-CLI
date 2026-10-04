@@ -1,12 +1,30 @@
 site_name: Bumpy CLI
+site_description: Documentação do gerenciador de versões de jobs por ambiente
+site_author: Daniel Felipe Santana Batista
 repo_url: https://github.com/iamDFSB/Bumpy-CLI
 repo_name: iamDFSB/Bumpy-CLI
-edit_uri: tree/main/docs
+edit_uri: edit/main/docs
+
+nav:
+  - Início: index.md
+  - Guia de uso: guia-de-uso.md
+  - Regras de versionamento: regras-de-versionamento.md
+  - Arquitetura: arquitetura.md
 
 theme:
   name: material
   language: pt-BR
-  logo: assets/images/logo.png
+  features:
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+  palette:
+    primary: deep purple
+    accent: purple
+
+plugins:
+  - search
 
 extra_css:
   - assets/styles/index.css
