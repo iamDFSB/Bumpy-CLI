@@ -17,5 +17,7 @@ class NotFoundPipelinePathException(FileNotFoundError):
 
 
 class VersionUnderflowError(Exception):
-    def __init__(self, file_name: str, version_part: str = "versão"):
-        super().__init__(f"An error occured, It is not possible to decrease the {version_part} in {file_name}: the minimum value is 0.")
+    def __init__(self, file_name: str, version_part: str = 'versão'):
+        super().__init__(
+            f'An error occured, It is not possible to decrease the {version_part} in {file_name}: the minimum value is 0.'
+        )

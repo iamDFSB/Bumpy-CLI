@@ -14,7 +14,8 @@ console = Console()
 @pipeline_app.command('up')
 def pipeline_up(
     part: VersionPart = typer.Argument(
-        VersionPart.patch, help='Parte da versão a atualizar (major, minor, patch)'
+        VersionPart.patch,
+        help='Parte da versão a atualizar (major, minor, patch)',
     ),
     uat: bool = typer.Option(
         False, '--uat', help='Aplica no ambiente de UAT.'
@@ -24,15 +25,16 @@ def pipeline_up(
     console.print(
         '[bold green]Subindo a versão de todos os jobs no ambiente selecionado...[/bold green]'
     )
-    ambient = "uat" if uat else "prd-marketplace"
+    ambient = 'uat' if uat else 'prd-marketplace'
     path_str = f'pipeline/{ambient}'
-    FileClient(). \
-        increase_all(segment=part.value, pipeline_path=path_str)
+    FileClient().increase_all(segment=part.value, pipeline_path=path_str)
+
 
 @pipeline_app.command('down')
 def pipeline_down(
     part: VersionPart = typer.Argument(
-        VersionPart.patch, help='Parte da versão a atualizar (major, minor, patch)'
+        VersionPart.patch,
+        help='Parte da versão a atualizar (major, minor, patch)',
     ),
     uat: bool = typer.Option(
         False, '--uat', help='Aplica no ambiente de UAT.'
@@ -42,7 +44,6 @@ def pipeline_down(
     console.print(
         '[bold yellow]Diminuindo a versão de todos os jobs no ambiente selecionado...[/bold yellow]'
     )
-    ambient = "uat" if uat else "prd-marketplace"
+    ambient = 'uat' if uat else 'prd-marketplace'
     path_str = f'pipeline/{ambient}'
-    FileClient(). \
-        decrease_all(segment=part.value, pipeline_path=path_str)
+    FileClient().decrease_all(segment=part.value, pipeline_path=path_str)
