@@ -1,8 +1,8 @@
 lint:
-	blue --check --diff . && isort --check --diff .
+	poetry run blue --check --diff . && poetry run isort --check --diff .
 
 doc:
-	mkdocs serve
+	poetry run mkdocs serve
 
 test:
-	pytest -s -x --cov=. -vv && coverage html
+	poetry run make lint && pytest -s -x --cov=. -vv && poetry run coverage html
