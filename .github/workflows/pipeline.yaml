@@ -1,0 +1,12 @@
+name: Pipeline
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Testing Bumpy CLI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run echo ls
+        run: echo $(ls)
+      - name: Run echo pwd
+        run: echo $(pwd)
