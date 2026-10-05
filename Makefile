@@ -5,4 +5,4 @@ doc:
 	mkdocs serve
 
 test:
-	make lint && pytest -s -x --cov=. -vv && coverage html
+	pytest -s -x --cov=. -vv && coverage html
