@@ -6,7 +6,7 @@ jobs:
     name: Testing Bumpy CLI
     runs-on: ubuntu-latest
     steps:
+      - name: Copy repository
+        uses: actions/checkout@v7
       - name: Run echo ls
         run: echo $(ls)
-      - name: Run echo pwd
-        run: echo $(pwd)
