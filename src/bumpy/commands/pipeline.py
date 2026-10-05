@@ -1,12 +1,12 @@
 import typer
 from rich.console import Console
-from bumpy.models import VersionPart
-from bumpy.file_client import FileClient
 
+from bumpy.file_client import FileClient
+from bumpy.models import VersionPart
 
 # Criamos um sub-app dedicado a ações do "pipeline" em lote
 pipeline_app = typer.Typer(
-    help='🚀 Comandos para manipular todos os jobs do pipeline.'
+    help='Comandos para manipular todos os jobs do pipeline.'
 )
 console = Console()
 
@@ -21,7 +21,7 @@ def pipeline_up(
         False, '--uat', help='Aplica no ambiente de UAT.'
     ),
 ):
-    """⬆️ Aumenta a versão de TODOS os jobs do pipeline de uma vez."""
+    """Aumenta a versao de TODOS os jobs do pipeline de uma vez."""
     console.print(
         '[bold green]Subindo a versão de todos os jobs no ambiente selecionado...[/bold green]'
     )
@@ -40,7 +40,7 @@ def pipeline_down(
         False, '--uat', help='Aplica no ambiente de UAT.'
     ),
 ):
-    """⬇️ Diminui a versão de TODOS os jobs do pipeline de uma vez."""
+    """Diminui a versao de TODOS os jobs do pipeline de uma vez."""
     console.print(
         '[bold yellow]Diminuindo a versão de todos os jobs no ambiente selecionado...[/bold yellow]'
     )

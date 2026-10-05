@@ -1,13 +1,11 @@
 import typer
 from rich.console import Console
-from bumpy.models import VersionPart
-from bumpy.file_client import FileClient
 
+from bumpy.file_client import FileClient
+from bumpy.models import VersionPart
 
 # Criamos um sub-app dedicado a ações de "job"
-job_app = typer.Typer(
-    help='📂 Comandos para manipular um único job específico.'
-)
+job_app = typer.Typer(help='Comandos para manipular um unico job especifico.')
 console = Console()
 
 
@@ -22,7 +20,7 @@ def job_up(
         False, '--uat', help='Aplica no ambiente de UAT.'
     ),
 ):
-    """⬆️ Aumenta a versão de um job específico."""
+    """Aumenta a versao de um job especifico."""
     console.print(
         f"[bold green]Aumentando versão do job '{name}'...[/bold green]"
     )
@@ -42,7 +40,7 @@ def job_down(
         False, '--uat', help='Aplica no ambiente de UAT.'
     ),
 ):
-    """⬇️ Diminui a versão de um job específico."""
+    """Diminui a versao de um job especifico."""
     console.print(
         f"[bold yellow]Diminuindo versão do job '{name}'...[/bold yellow]"
     )

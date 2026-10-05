@@ -4,7 +4,7 @@ from bumpy.commands import job_app, pipeline_app
 
 # App principal (Raiz da Árvore)
 app = typer.Typer(
-    help='💥 Bumpy: Gerenciador de versões para pipelines multi-plataforma.'
+    help='Bumpy: Gerenciador de versoes para pipelines multi-plataforma.'
 )
 
 # Registrando os galhos/nós na árvore de comandos

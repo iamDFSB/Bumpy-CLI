@@ -1,4 +1,5 @@
 from typer.testing import CliRunner
+
 from bumpy.commands.job import job_app
 from bumpy.models import VersionPart
 
@@ -118,7 +119,9 @@ def test_upgrade_version_uat_major_app(pipeline_workspace, get_version_value):
     assert new_version > current_version
 
 
-def test_downgrade_version_uat_patch_app(pipeline_workspace, get_version_value):
+def test_downgrade_version_uat_patch_app(
+    pipeline_workspace, get_version_value
+):
     path = pipeline_workspace / 'uat/meu-cron/version'
     current_version = get_version_value(path, VersionPart.patch)
 
@@ -130,7 +133,9 @@ def test_downgrade_version_uat_patch_app(pipeline_workspace, get_version_value):
     assert new_version < current_version
 
 
-def test_downgrade_version_uat_minor_app(pipeline_workspace, get_version_value):
+def test_downgrade_version_uat_minor_app(
+    pipeline_workspace, get_version_value
+):
     path = pipeline_workspace / 'uat/meu-cron/version'
     current_version = get_version_value(path, VersionPart.minor)
 
@@ -142,7 +147,9 @@ def test_downgrade_version_uat_minor_app(pipeline_workspace, get_version_value):
     assert new_version < current_version
 
 
-def test_downgrade_version_uat_major_app(pipeline_workspace, get_version_value):
+def test_downgrade_version_uat_major_app(
+    pipeline_workspace, get_version_value
+):
     path = pipeline_workspace / 'uat/meu-cron/version'
     current_version = get_version_value(path, VersionPart.major)
 

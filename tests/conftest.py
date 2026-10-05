@@ -1,4 +1,5 @@
 import pytest
+
 from bumpy.models import VersionPart
 
 
@@ -21,7 +22,7 @@ def get_version_value():
     def executor(path: str, part: VersionPart) -> int:
         with open(path) as file:
             result = file.read()
-            version = result.split(".")[part.get_index_position()]
+            version = result.split('.')[part.get_index_position()]
             return int(version)
-    return executor
 
+    return executor

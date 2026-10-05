@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from .exceptions.file_client_exceptions import (
     EmptyFileException,
     MissingSegmentsException,
