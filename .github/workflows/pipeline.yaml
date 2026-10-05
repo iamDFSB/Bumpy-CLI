@@ -8,7 +8,18 @@ jobs:
     steps:
       - name: Copy repository
         uses: actions/checkout@v7
+
       - name: Python setup
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install --without doc
+      
+      - name: Run tests
+        run: make test
+
