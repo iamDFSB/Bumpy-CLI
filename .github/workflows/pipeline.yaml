@@ -21,5 +21,5 @@ jobs:
         run: poetry install --with dev --without doc
       
       - name: Run tests
-        run: 
+        run: make test
 
