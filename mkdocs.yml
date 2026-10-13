@@ -1,4 +1,5 @@
-site_name: Bumpy CLI
+site_name: Bumpy-CLI
+site_url: !ENV READTHEDOCS_CANONICAL_URL
 site_description: Documentação do gerenciador de versões de jobs por ambiente
 site_author: Daniel Felipe Santana Batista
 repo_url: https://github.com/iamDFSB/Bumpy-CLI
