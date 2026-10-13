@@ -4,7 +4,6 @@ from rich.console import Console
 from bumpy.file_client import FileClient
 from bumpy.models import VersionPart
 
-
 # Criamos um sub-app dedicado a ações de "job"
 job_app = typer.Typer(help='Comandos para manipular um unico job especifico.')
 console = Console()
