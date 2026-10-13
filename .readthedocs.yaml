@@ -10,7 +10,7 @@ build:
   tools:
     python: "3.12"
   jobs:
-    pre-install:
+    pre_install:
       - pip install mkdocs-material
 
 # Build documentation with Mkdocs
