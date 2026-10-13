@@ -1,118 +1,114 @@
+![Bumpy CLI](docs/assets/images/logo.png)
+
 # Bumpy CLI
 
-Bumpy CLI é um utilitário em Python para gerenciar versões de jobs em pipelines, incrementando ou decrementando os segmentos de uma versão (`major`, `minor` ou `patch`) em arquivos de controle localizados dentro de pastas de ambiente.
+[![Documentação](https://img.shields.io/badge/Documenta%C3%A7%C3%A3o-Read%20the%20Docs-blue?logo=readthedocs)](https://bumpy-cli.readthedocs.io/pt-br/latest/)
+[![Codecov](https://codecov.io/gh/iamDFSB/Bumpy-CLI/branch/main/graph/badge.svg)](https://app.codecov.io/github/iamDFSB/Bumpy-CLI)
+[![CI](https://github.com/iamDFSB/Bumpy-CLI/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/iamDFSB/Bumpy-CLI/actions)
 
-## Objetivo
+O Bumpy CLI ajuda a atualizar as versões dos jobs mantidos em arquivos `version`
+de um pipeline. Com ele, você pode incrementar ou decrementar `major`, `minor`
+ou `patch` de um job específico ou de todos os jobs de um ambiente.
 
-O projeto foi pensado para facilitar a manutenção de versões em ambientes como:
+## Requisitos
 
-- `pipeline/prd-marketplace/`
-- `pipeline/uat/`
+- Python 3.12 ou superior;
+- um projeto com a estrutura de pastas descrita abaixo.
 
-Cada job possui um arquivo `version` com conteúdo no formato:
+## Instalação
+
+Como o Bumpy é uma ferramenta de linha de comando, recomendamos instalá-lo com
+[pipx](https://pipx.pypa.io/), que mantem as dependencias isoladas:
+
+```bash
+pipx install bumpy-cli
+```
+
+Também é possível instalar no ambiente Python ativo:
+
+```bash
+python -m pip install bumpy-cli
+```
+
+Confirme a instalacao e veja os comandos disponiveis:
+
+```bash
+bumpy --help
+```
+
+## Prepare o projeto
+
+Execute os comandos a partir da raiz do projeto que contem a pasta `pipeline`.
+Cada job precisa ter um arquivo `version` com tres numeros separados por ponto:
+
+```text
+pipeline/
+├── prd-marketplace/
+│   └── meu-cron/
+│       └── version
+└── uat/
+    └── meu-cron/
+        └── version
+```
+
+Por exemplo, o arquivo `pipeline/prd-marketplace/meu-cron/version` pode conter:
 
 ```text
 1.2.3
 ```
 
-O CLI lê esse valor, altera o segmento solicitado e salva a nova versão de volta no arquivo.
+## Uso
 
-## Estrutura esperada
+### Atualizar um job
 
-```text
-pipeline/
-├── prd-marketplace/
-│   ├── meu-cron/
-│   │   └── version
-│   └── meu-cron-second/
-│       └── version
-└── uat/
-    ├── meu-cron/
-    │   └── version
-    └── meu-cron-second/
-        └── version
-```
-
-## Regras do projeto
-
-- O nome do arquivo precisa ser `version`.
-- O conteúdo deve seguir o padrão `major.minor.patch`.
-- A aplicação aceita apenas `major`, `minor` e `patch` como segmentos.
-- O comando de decremento não permite que qualquer parte da versão fique abaixo de `0`.
-- Se o diretório do job ou do ambiente não existir, a ferramenta lança exceção de caminho não encontrado.
-- Se o arquivo estiver vazio ou não tiver 3 partes, a execução falha com uma exceção específica.
-
-## Como instalar
-
-Com Poetry:
-
-```bash
-poetry install
-```
-
-O entrypoint do CLI já está configurado em `pyproject.toml`:
-
-```toml
-[tool.poetry.scripts]
-bumpy = "bumpy.main:app"
-```
-
-## Exemplos de uso
-
-### Job específico
+Por padrão, os comandos atuam no ambiente `prd-marketplace`:
 
 ```bash
 bumpy job up meu-cron patch
-bumpy job up meu-cron minor
-bumpy job up meu-cron major
-
-bumpy job down meu-cron patch
-bumpy job down meu-cron minor
-bumpy job down meu-cron major
 ```
 
-### Ambiente UAT
+Esse comando altera `1.2.3` para `1.2.4`. Para atualizar outro segmento:
+
+```bash
+bumpy job up meu-cron minor
+bumpy job up meu-cron major
+```
+
+Use `down` para decrementar o segmento. O valor não pode ficar abaixo de zero:
+
+```bash
+bumpy job down meu-cron patch
+```
+
+Para atuar no ambiente `uat`, adicione `--uat`:
 
 ```bash
 bumpy job up meu-cron patch --uat
-bumpy job down meu-cron minor --uat
 ```
 
-### Pipeline completo
+### Atualizar todos os jobs de um ambiente
+
+Os comandos `all` atualizam todos os jobs dentro do ambiente selecionado:
 
 ```bash
 bumpy all up patch
-bumpy all up minor --uat
-bumpy all down major
-bumpy all down patch --uat
+bumpy all down minor
+bumpy all up major --uat
 ```
 
-## Fluxo interno
+Cada pasta de job do ambiente precisa conter um arquivo `version` válido.
 
-A lógica principal fica em `FileClient`, que:
+## Ajuda
 
-1. valida o caminho do pipeline;
-2. lê o arquivo `version`;
-3. converte os segmentos em inteiros;
-4. incrementa ou decrementa o segmento solicitado;
-5. escreve a versão de volta no arquivo.
-
-## Testes
-
-Os testes automáticos validam os comandos de `job` e `all` para ambos os ambientes (`prd-marketplace` e `uat`).
+Consulte a ajuda geral ou a de um grupo de comandos:
 
 ```bash
-pytest
+bumpy --help
+bumpy job --help
+bumpy all --help
 ```
 
-## Stack principal
+## Desenvolvimento
 
-- Python 3.12+
-- Typer
-- Rich
-- pytest
-- MkDocs + Material
-
-## Objetivo prático
-
-O projeto ajuda a automatizar a gestão de versões em pipelines multiambiente, permitindo ajustar rapidamente a versão de um job individual ou de todos os jobs do ambiente de forma padronizada.
+O código-fonte, as instruções para contribuir e a documentação do projeto estão
+no [repositorio no GitHub](https://github.com/iamDFSB/Bumpy-CLI).

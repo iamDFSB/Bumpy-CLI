@@ -1,16 +1,37 @@
 [project]
 name = "bumpy-cli"
 version = "0.1.0"
-description = ""
+description = "CLI para gerenciar versoes de jobs em pipelines."
 authors = [
     {name = "Daniel Felipe Santana Batista",email = "daniel.sbatista@shopee.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
+keywords = ["cli", "pipeline", "versionamento", "jobs"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+]
 dependencies = [
     "typer (>=0.27.2,<0.28.0)"
 ]
 
+[project.urls]
+Homepage = "https://github.com/iamDFSB/Bumpy-CLI"
+Repository = "https://github.com/iamDFSB/Bumpy-CLI"
+Documentation = "https://bumpy-cli.readthedocs.io/pt-br/latest/"
+
+[project.scripts]
+bumpy = "bumpy.main:app"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -18,9 +39,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 packages = [{ include = "bumpy", from = "src" }]
-
-[tool.poetry.scripts]
-bumpy = "bumpy.main:app" # entrypoint to the cli
 
 [dependency-groups]
 dev = [
