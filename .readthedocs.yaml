@@ -15,7 +15,7 @@ build:
       - poetry config virtualenvs.create false 
     post_install:
       - poetry install --only doc
-  commands:
+  build:
       - poetry run mkdocs build --clean --site-dir $READTHEDOCS_OUTPUT/html
 
 # Build documentation with Mkdocs
