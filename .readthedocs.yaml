@@ -10,8 +10,11 @@ build:
   tools:
     python: "3.12"
   jobs:
-    pre_install:
-      - pip install mkdocs-material
+    post_create_environment:
+      - pip install poetry
+      - poetry config virtualenvs.create false 
+    post_install:
+      - poetry install --only doc
 
 # Build documentation with Mkdocs
 mkdocs:
