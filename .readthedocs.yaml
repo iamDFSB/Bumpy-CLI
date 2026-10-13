@@ -16,6 +16,7 @@ build:
     post_install:
       - poetry install --only doc
     build:
+      commands:
         - poetry run mkdocs build --clean --site-dir $READTHEDOCS_OUTPUT/html
 
 # Build documentation with Mkdocs
