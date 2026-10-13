@@ -1,107 +1,39 @@
-# Regras de versionamento
+# Regras de versão
 
-A regra central do projeto é que cada job tenha um arquivo `version` representando uma versão semver simplificada, seguindo o formato:
+Cada job deve ter um arquivo `version` com três números inteiros separados por
+ponto:
 
 ```text
 major.minor.patch
 ```
 
-Exemplo:
+Por exemplo, `2.4.9`.
 
-```text
-2.4.9
-```
+## Segmentos
 
-## 1. Segmentos válidos
+- `major`: primeira parte da versão;
+- `minor`: segunda parte da versão;
+- `patch`: terceira parte da versão.
 
-O projeto reconhece somente três segmentos:
+O comando `up` soma 1 ao segmento escolhido, sem alterar os outros. Por exemplo,
+incrementar `patch` de `2.4.9` resulta em `2.4.10`.
 
-- `major`
-- `minor`
-- `patch`
+O comando `down` subtrai 1 do segmento escolhido, sem alterar os outros. Um
+segmento que já esteja em `0` não pode ser decrementado.
 
-Esses valores são definidos pelo `Enum` `VersionPart` em `src/bumpy/models.py`.
+## Formato e localização
 
-## 2. Estrutura de arquivos
-
-A estrutura esperada do pipeline é:
+O arquivo precisa chamar-se `version` e estar dentro da pasta do job:
 
 ```text
 pipeline/
 ├── prd-marketplace/
-│   └── meu-cron/
+│   └── nome-do-job/
 │       └── version
 └── uat/
-    └── meu-cron/
+    └── nome-do-job/
         └── version
 ```
 
-Cada folder do job contém um arquivo `version`, e esse arquivo é o ponto de atualização do número.
-
-## 3. Regras de leitura e escrita
-
-A lógica do `FileClient` faz o seguinte:
-
-1. valida se o caminho existe;
-2. abre o arquivo `version`;
-3. divide o conteúdo por ponto;
-4. converte cada parte em número inteiro;
-5. altera o segmento solicitado;
-6. grava a versão atualizada de volta.
-
-## 4. Comportamento do incremento
-
-Quando o comando é `up`, a operação faz:
-
-```text
-X.Y.Z -> X.(Y+1).Z
-```
-
-ou
-
-```text
-X.Y.Z -> X.Y.(Z+1)
-```
-
-conforme o segmento selecionado.
-
-## 5. Comportamento do decremento
-
-Quando o comando é `down`, o projeto reduz o segmento escolhido, mas não permite que o valor fique menor que zero.
-
-Exemplo:
-
-```text
-1.2.0 -> 1.1.0
-```
-
-Se o segmento atual for `0`, uma exceção é levantada antes da escrita.
-
-## 6. Regras de validação
-
-O projeto trata diversas condições de erro:
-
-- arquivo vazio;
-- arquivo incompleto;
-- caminho do pipeline inexistente;
-- tentativa de decrementar abaixo de zero.
-
-Essas validações estão centralizadas em `src/bumpy/exceptions/file_client_exceptions.py`.
-
-## 7. Semântica do versionamento
-
-Embora o projeto use um formato enxuto, ele se comporta de forma muito próxima ao versionamento semântico tradicional:
-
-- `major`: mudanças maiores, compatibilidade afetada ou mudança de ciclo;
-- `minor`: evolução funcional;
-- `patch`: correções ou ajustes pequenos.
-
-A regra não é uma validação semântica profunda; ela é funcional e orientada à convenção.
-
-## 8. Observações importantes
-
-- O projeto assume que o diretório de execução atual é a raiz do workspace do pipeline.
-- A busca do caminho é feita automaticamente a partir do diretório corrente.
-- O uso de `--uat` muda a base de caminho, mas mantém a mesma regra de versionamento.
-
-Em resumo, a regra do projeto é simples e muito objetiva: cada job vive com um número versionado em arquivo e o CLI apenas altera esse número de maneira previsível.
+Execute os comandos a partir da raiz que contém `pipeline`. O ambiente padrão é
+`prd-marketplace`; use `--uat` para selecionar `uat`.

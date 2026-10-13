@@ -1,154 +1,105 @@
-# Guia de uso
+# Instalação e uso
 
-Este guia explica como usar o CLI do Bumpy em cenários reais de desenvolvimento e operação.
+## Requisitos
 
-## 1. Instalação
+- Python 3.12 ou superior;
+- acesso ao projeto de pipeline em que deseja atualizar as versões.
 
-O projeto usa Poetry e já define o entrypoint do CLI em `pyproject.toml`:
+## Instalação
 
-```toml
-[tool.poetry.scripts]
-bumpy = "bumpy.main:app"
-```
-
-Então, na raiz do projeto, rode:
+Para instalar o Bumpy CLI de forma isolada, use o [pipx](https://pipx.pypa.io/):
 
 ```bash
-poetry install
+pipx install bumpy-cli
 ```
 
-Após a instalação, o comando fica disponível como:
+Como alternativa, instale-o no ambiente Python ativo:
+
+```bash
+python -m pip install bumpy-cli
+```
+
+Confira os comandos disponíveis:
 
 ```bash
 bumpy --help
 ```
 
-Se preferir executar diretamente pela ferramenta do ambiente, também é possível usar:
+## Prepare o projeto
 
-```bash
-poetry run bumpy --help
+Execute o Bumpy a partir da raiz do projeto que contém a pasta `pipeline`.
+Cada job deve ter um arquivo chamado `version` com três números inteiros
+separados por ponto:
+
+```text
+pipeline/
+├── prd-marketplace/
+│   └── meu-cron/
+│       └── version
+└── uat/
+    └── meu-cron/
+        └── version
 ```
 
-## 2. Visão geral dos comandos
+Por exemplo, o conteúdo do arquivo `pipeline/prd-marketplace/meu-cron/version`
+pode ser:
 
-O CLI principal cria dois grupos de comandos:
-
-- `job`: para manipular um job específico.
-- `all`: para manipular todos os jobs de um ambiente.
-
-### Estrutura de chamadas
-
-```bash
-bumpy job up <nome-do-job> <major|minor|patch>
-
-bumpy job down <nome-do-job> <major|minor|patch>
-
-bumpy all up <major|minor|patch>
-
-bumpy all down <major|minor|patch>
+```text
+1.2.3
 ```
 
-A flag `--uat` alterna o ambiente de operação:
+## Atualize um job
+
+Os comandos `job` atualizam um único job. Sem `--uat`, o ambiente usado é
+`prd-marketplace`:
+
+```bash
+bumpy job up meu-cron patch
+bumpy job up meu-cron minor
+bumpy job up meu-cron major
+```
+
+Use `down` para decrementar o segmento:
+
+```bash
+bumpy job down meu-cron patch
+```
+
+Para executar no ambiente `uat`, acrescente `--uat`:
 
 ```bash
 bumpy job up meu-cron patch --uat
-bumpy all down minor --uat
 ```
 
-## 3. Comandos por ambiente
+## Atualize todos os jobs
 
-### Ambiente padrão: prd-marketplace
-
-Se a flag `--uat` não for informada, o projeto usa o ambiente `prd-marketplace`.
+Os comandos `all` aplicam a operação a todos os jobs no ambiente escolhido:
 
 ```bash
-bumpy job up meu-cron patch
-bumpy all up minor
+bumpy all up patch
+bumpy all down minor
+bumpy all up major --uat
 ```
 
-### Ambiente UAT
+Cada pasta de job precisa conter um arquivo `version` válido. Antes de
+atualizações em lote, confira os arquivos do ambiente para evitar interrupção
+por conteúdo inválido ou por um segmento que não possa ser decrementado.
 
-Quando o ambiente é `uat`, o caminho pesquisado pelo projeto passa a ser `pipeline/uat/...`.
+## Ajuda dos comandos
+
+Use `--help` para ver a sintaxe e as opções:
 
 ```bash
-bumpy job up meu-cron patch --uat
-bumpy all down major --uat
+bumpy --help
+bumpy job --help
+bumpy all --help
 ```
 
-## 4. Fluxo de execução real
+## Problemas comuns
 
-Ao executar, por exemplo:
-
-```bash
-bumpy job up meu-cron patch
-```
-
-o sistema:
-
-1. monta o caminho `pipeline/prd-marketplace/meu-cron/version`;
-2. valida se esse caminho existe;
-3. lê o conteúdo do arquivo, por exemplo `1.2.3`;
-4. aumenta o valor do segmento `patch` para `1.2.4`;
-5. salva o arquivo novamente.
-
-## 5. Exemplos práticos
-
-### Aumentar apenas o patch de um job
-
-```bash
-bumpy job up meu-cron patch
-```
-
-### Aumentar o minor de todos os jobs do ambiente UAT
-
-```bash
-bumpy all up minor --uat
-```
-
-### Diminuir o major de um job específico
-
-```bash
-bumpy job down meu-cron major
-```
-
-### Diminuir o patch de todos os jobs em produção
-
-```bash
-bumpy all down patch
-```
-
-## 6. Casos de erro comuns
-
-### Arquivo `version` vazio
-
-Se o arquivo existe, mas não tem conteúdo, o projeto lança um erro de arquivo vazio.
-
-### Arquivo com formato inválido
-
-Se o conteúdo não seguir `major.minor.patch`, o sistema sinaliza que faltam segmentos ou que o valor é inválido.
-
-### Decremento abaixo de zero
-
-Quando o comando `down` tenta reduzir o valor de um segmento para menos que zero, a ferramenta bloqueia a operação e lança `VersionUnderflowError`.
-
-### Caminho inexistente
-
-Se o ambiente ou o nome do job não corresponde às pastas presentes na estrutura do projeto, a aplicação informa que o caminho do pipeline não foi encontrado.
-
-## 7. Boas práticas
-
-- mantenha todos os arquivos `version` com o mesmo padrão;
-- use `major` somente para mudanças de compatibilidade ou impactos grandes;
-- use `minor` para evoluções de funcionalidade;
-- use `patch` para ajustes menores;
-- prefira testar em `uat` antes de aplicar alteração em produção.
-
-## 8. Dicas de uso em CI/CD
-
-O CLI pode ser integrado facilmente em scripts de release e deploy, destacando fluxos como:
-
-- levar um job para produção;
-- atualizar o número da versão em lote;
-- manter a padronização dos pipelines por ambiente.
-
-A ideia é que a operação seja simples, previsível e totalmente baseada em arquivos de controle dentro do projeto.
+- **Job ou ambiente não encontrado:** confira se está executando na raiz correta
+  e se os diretórios seguem a estrutura apresentada acima.
+- **Arquivo vazio ou versão incompleta:** preencha `version` no formato
+  `major.minor.patch`, por exemplo `1.2.3`.
+- **Tentativa de decrementar um segmento igual a zero:** `down` não reduz nenhum
+  segmento para um valor menor que zero.

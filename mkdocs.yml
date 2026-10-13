@@ -8,9 +8,8 @@ edit_uri: edit/main/docs
 
 nav:
   - Início: index.md
-  - Guia de uso: guia-de-uso.md
-  - Regras de versionamento: regras-de-versionamento.md
-  - Arquitetura: arquitetura.md
+  - Instalação e uso: guia-de-uso.md
+  - Regras de versão: regras-de-versionamento.md
 
 theme:
   name: material
